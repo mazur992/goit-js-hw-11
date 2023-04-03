@@ -9,7 +9,7 @@ const imagesApiService = new ImagesApiService();
 
 const Handlebars = require('handlebars');
 const template = Handlebars.compile(
-  "<div class='photo-card'><a href={{webformatURL}}><img class='gallary__image' loading='lazy' style='width: 100%; height: auto' src={{largeImageURL}} alt={{tags}} /></a><div class='info'><p class='info-item'><b>Likes</b><br>{{likes}}</p><p class='info-item'><b>Views</b><br>{{views}}</p><p class='info-item'><b>Comments</b><br>{{comments}}</p><p class='info-item'><b>Downloads</b><br>{{downloads}}</p></div></div>"
+  "<div class='photo-card'><a href={{webformatURL}} class='gallery__link'><img class='gallary__image' loading='lazy' style='width: 100%; height: auto' src={{largeImageURL}} alt={{tags}} /></a><div class='info'><p class='info-item'><b>Likes</b><br>{{likes}}</p><p class='info-item'><b>Views</b><br>{{views}}</p><p class='info-item'><b>Comments</b><br>{{comments}}</p><p class='info-item'><b>Downloads</b><br>{{downloads}}</p></div></div>"
 );
 
 const refs = {
@@ -64,7 +64,9 @@ async function handleLoadMore(event) {
 }
 
 async function addMarkup({ data }) {
-  let murkup = data.hits
+  buttonsDisabledTrue();
+
+  let markup = data.hits
     .map(image =>
       template({
         webformatURL: image.webformatURL,
@@ -85,7 +87,7 @@ async function addMarkup({ data }) {
   const photoCardEL = document.querySelector(
     `.gallery__item${imagesApiService.pagePixabay}`
   );
-  photoCardEL.insertAdjacentHTML('beforeend', murkup);
+  photoCardEL.insertAdjacentHTML('beforeend', markup);
 
   var gallery = new SimpleLightbox('.gallery a', {
     captionSelector: 'img',
@@ -99,19 +101,23 @@ async function addMarkup({ data }) {
   const timerId = setTimeout(() => {
     photoCardEL.style = 'opacity: 1; z-index: 1';
     refs.btnLoadMore.style = 'display:block';
+    refs.btnSearch.disabled = false;
+    refs.btnLoadMore.disabled = false;
 
-    buttonDisplayNone();
+    buttonSpinerDisplayNone();
 
     if (imagesApiService.pagePixabay === 2 && data.hits.length !== 0)
       Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
-  }, 7000);
+  }, 3000);
 
   if (imagesApiService.pagePixabay === 2 && data.hits.length === 0) {
     Notiflix.Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.'
     );
 
-    buttonDisplayNone();
+    buttonSpinerDisplayNone();
+
+    buttonsDisabledFalse();
 
     clearTimeout(timerId);
     return;
@@ -121,9 +127,11 @@ async function addMarkup({ data }) {
       "We're sorry, but you've reached the end of search results."
     );
 
-    buttonDisplayNone();
+    buttonSpinerDisplayNone();
 
     refs.btnLoadMore.style = 'display:none';
+
+    buttonsDisabledFalse();
 
     clearTimeout(timerId);
     return;
@@ -133,7 +141,16 @@ async function addMarkup({ data }) {
 function clearGallery() {
   refs.gallery.innerHTML = '';
 }
-function buttonDisplayNone() {
+function buttonSpinerDisplayNone() {
   refs.submitSpinner.style = 'display:none';
   refs.loadMoreSpinner.style = 'display:none';
+}
+function buttonsDisabledFalse() {
+  refs.btnSearch.disabled = false;
+  refs.btnLoadMore.disabled = false;
+}
+
+function buttonsDisabledTrue() {
+  refs.btnSearch.disabled = true;
+  refs.btnLoadMore.disabled = true;
 }

@@ -24,13 +24,15 @@ input:focus {
   outline: none;
   border: 1px solid blue;
 }
-.gallary {
+img {
 }
 .gallary__image:hover {
   transform: scale(1.03);
 }
 .gallary__image {
   transition: transform 250ms linear;
+}
+.gallery__link {
 }
 .photo-card {
   padding: 10px;
