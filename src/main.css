@@ -31,8 +31,9 @@ div[data-display='gallery__i'] {
   flex-wrap: wrap;
   gap: 20px;
   align-items: end;
-
   justify-content: center;
+
+  margin-bottom: 20px;
 }
 .gallary__image:hover {
   transform: scale(1.03);

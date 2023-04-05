@@ -90,7 +90,7 @@ async function addMarkup({ data }) {
 
   refs.gallery.insertAdjacentHTML(
     'beforeend',
-    `<div class=gallery__item${imagesApiService.pagePixabay} data-display=gallery__i style = 'opacity: 0; position: absolute;z-index: -1; display:flex; flex-wrap:wrap;gap:20px'></div>`
+    `<div class=gallery__item${imagesApiService.pagePixabay} data-display=gallery__i style = 'opacity: 0; position: absolute;z-index: -1'></div>`
   );
   const photoCardEL = document.querySelector(
     `.gallery__item${imagesApiService.pagePixabay}`
