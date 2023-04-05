@@ -26,6 +26,14 @@ input:focus {
 }
 img {
 }
+div[data-display='gallery__i'] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: end;
+
+  justify-content: center;
+}
 .gallary__image:hover {
   transform: scale(1.03);
 }
@@ -35,10 +43,7 @@ img {
 .gallery__link {
 }
 .photo-card {
-  padding: 10px;
-
-  display: inline-block;
-  max-width: calc((100% - 80px) / 4);
+  width: 300px;
 }
 .info {
   display: flex;
@@ -58,6 +63,7 @@ img {
   background: white;
 }
 .load-more {
+  margin-top: 20px;
   margin-left: auto;
   margin-right: auto;
 }

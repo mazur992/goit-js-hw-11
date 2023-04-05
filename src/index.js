@@ -5,6 +5,14 @@ import axios from 'axios';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
+const gallery = new SimpleLightbox('.gallery a', {
+  captionSelector: 'img',
+  // captionsData: 'alt',
+  captionPosition: 'bottom',
+  captionDelay: 250,
+  scrollZoom: false,
+});
+
 const imagesApiService = new ImagesApiService();
 
 const Handlebars = require('handlebars');
@@ -69,8 +77,8 @@ async function addMarkup({ data }) {
   let markup = data.hits
     .map(image =>
       template({
-        webformatURL: image.webformatURL,
-        largeImageURL: image.largeImageURL,
+        webformatURL: image.largeImageURL,
+        largeImageURL: image.webformatURL,
         tags: image.tags,
         likes: image.likes,
         views: image.views,
@@ -82,20 +90,13 @@ async function addMarkup({ data }) {
 
   refs.gallery.insertAdjacentHTML(
     'beforeend',
-    `<div class=gallery__item${imagesApiService.pagePixabay} style = 'opacity: 0; position: absolute;z-index: -1'></div>`
+    `<div class=gallery__item${imagesApiService.pagePixabay} data-display=gallery__i style = 'opacity: 0; position: absolute;z-index: -1; display:flex; flex-wrap:wrap;gap:20px'></div>`
   );
   const photoCardEL = document.querySelector(
     `.gallery__item${imagesApiService.pagePixabay}`
   );
   photoCardEL.insertAdjacentHTML('beforeend', markup);
 
-  var gallery = new SimpleLightbox('.gallery a', {
-    captionSelector: 'img',
-    captionsData: 'alt',
-    captionPosition: 'bottom',
-    captionDelay: 250,
-    scrollZoom: false,
-  });
   gallery.refresh();
 
   const timerId = setTimeout(() => {
